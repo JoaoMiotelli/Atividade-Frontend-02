@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atendimento Online</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="chat-box">
+        <header>
+          <h2>Atendimento on-line</h2>
+        </header>
+        <div class="messages-list">
+          <div class="message-item">
+            <strong>Atendente diz:</strong>
+            <div class="message-chat">Olá Sr. João</div>
+          </div>
+          <div class="message-item">
+            <strong>Atendente diz:</strong>
+            <div class="message-chat">Estaremos utilizando o modelo apresentado em aula devido ao modelo prévio não ter sofrido alterações.</div>
+          </div>
+          <div class="message-item message-user">
+            <strong>Você diz:</strong>
+            <div class="message-chat">Olá</div>
+          </div>
+          <div class="message-item message-user">
+            <strong>Você diz:</strong>
+            <div class="message-chat">Tudo bem</div>
+          </div>
+        </div>
+        <form id="form-chat-send" action="index.html" method="post">
+          <input type="text" id="user-input" name="user-input" placeholder="Digite sua mensagem..." />
+          <button id="send-button-user" type="button">Enviar User</button>
+          <button id="send-button-atend" type="button">Enviar Atend.</button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const chatBox = document.querySelector(".messages-list");
+            const userInput = document.getElementById("user-input");
+            const userButton = document.getElementById("send-button-user");
+            const atendButton = document.getElementById("send-button-atend");
+            const form = document.getElementById("form-chat-send");
+
+            userButton.addEventListener("click", () => sendMessage("Você", true));
+            atendButton.addEventListener("click", () => sendMessage("Atendente", false));
+
+            function sendMessage(sender, isUser) {
+                const messageText = userInput.value.trim();
+                if (messageText !== "") {
+                    const messageItem = document.createElement("div");
+                    messageItem.classList.add("message-item");
+                    messageItem.classList.add(isUser ? "message-user" : "message-atend");
+                    const messageHeader = document.createElement("strong");
+                    messageHeader.textContent = `${sender} diz:`;
+                    const messageTextDiv = document.createElement("div");
+                    messageTextDiv.classList.add("message-chat");
+                    messageTextDiv.textContent = messageText;
+                    messageItem.appendChild(messageHeader);
+                    messageItem.appendChild(messageTextDiv);
+                    chatBox.appendChild(messageItem);
+
+                    // Limpa a caixa de entrada
+                    userInput.value = "";
+
+                    // Rola para a última mensagem
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                }
+            }
+
+            form.addEventListener("submit", function(event) {
+                event.preventDefault();
+                sendMessage("Você", true);
+            });
+        });
+    </script>
+</body>
+</html>
